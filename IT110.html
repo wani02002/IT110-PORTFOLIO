@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liwani Mercy B. España — Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Bebas Neue', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+            mono: ['DM Mono', 'monospace'],
+          },
+          colors: {
+            cream: '#F5F0E8',
+            ink:   '#1A1612',
+            rust:  '#C4521A',
+            sage:  '#4A6741',
+            dusty: '#8C7B6E',
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background-color: #F5F0E8; color: #1A1612; }
+
+    /* ── Grain overlay ── */
+    .grain {
+      position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── Nav underline ── */
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1.5px; background: #C4521A;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Hero char animation ── */
+    .hero-char { display: inline-block; opacity: 0; animation: charUp 0.5s ease forwards; }
+    @keyframes charUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Scroll bounce ── */
+    .bounce { animation: bounce 2s infinite; }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+    /* ── Skill tag hover ── */
+    .skill-tag { transition: background 0.2s, color 0.2s, border-color 0.2s; cursor: default; }
+    .skill-tag:hover { background: #C4521A; color: #F5F0E8; border-color: #C4521A; }
+
+    /* ── Experience left border ── */
+    .exp-card { border-left: 2px solid #C4521A; }
+
+    /* ── Mobile nav ── */
+    #mobile-menu { transition: max-height 0.35s ease, opacity 0.35s ease; max-height: 0; opacity: 0; overflow: hidden; }
+    #mobile-menu.open { max-height: 300px; opacity: 1; }
+
+    /* ── Form inputs ── */
+    .form-input {
+      width: 100%; background: transparent;
+      border: 1px solid rgba(26,22,18,0.2);
+      border-radius: 2px; padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      color: #1A1612; outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: #C4521A; }
+    .form-input::placeholder { color: #8C7B6E; }
+    .form-input.error { border-color: #dc2626; }
+    .error-msg { font-size: 0.75rem; color: #dc2626; margin-top: 4px; display: none; }
+    .error-msg.show { display: block; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 100;
+      background: #1A1612; color: #F5F0E8;
+      padding: 0.85rem 1.5rem; border-radius: 4px;
+      font-family: 'DM Mono', monospace; font-size: 0.8rem; letter-spacing: 0.05em;
+      transform: translateY(10px); opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      pointer-events: none;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── Progress bar ── */
+    .progress-bar { height: 4px; background: rgba(26,22,18,0.08); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #C4521A; border-radius: 2px; width: 0; transition: width 1.2s ease; }
+
+    /* ── Section tag ── */
+    .section-tag { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8C7B6E; }
+
+    /* ── Back to top ── */
+    #back-top {
+      position: fixed; bottom: 2rem; left: 2rem; z-index: 99;
+      width: 40px; height: 40px; background: #1A1612; color: #F5F0E8;
+      border-radius: 2px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; opacity: 0; transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s, background 0.2s;
+    }
+    #back-top.visible { opacity: 1; transform: translateY(0); }
+    #back-top:hover { background: #C4521A; }
+  </style>
+</head>
+<body class="antialiased">
+
+<!-- Grain -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- Toast notification -->
+<div id="toast" role="alert" aria-live="polite">✓ Message sent successfully!</div>
+
+<!-- Back to top -->
+<button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- ═══════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-40 bg-cream/90 backdrop-blur-sm border-b border-ink/10">
+  <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <span class="font-mono text-sm text-dusty tracking-widest uppercase">LME</span>
+
+    <!-- Desktop links -->
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+      <a href="#about"      class="nav-link text-ink/70 hover:text-ink transition-colors">About</a>
+      <a href="#experience" class="nav-link text-ink/70 hover:text-ink transition-colors">Experience</a>
+      <a href="#skills"     class="nav-link text-ink/70 hover:text-ink transition-colors">Skills</a>
+      <a href="#contact"    class="nav-link text-ink/70 hover:text-ink transition-colors">Contact</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="#contact" class="text-sm font-mono bg-ink text-cream px-4 py-2 rounded-sm hover:bg-rust transition-colors duration-200">
+        Hire Me
+      </a>
+      <!-- Hamburger -->
+      <button id="menu-btn" class="md:hidden p-1" aria-label="Toggle menu" aria-expanded="false">
+        <svg id="icon-open"  width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="icon-close" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="hidden"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden border-t border-ink/10">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-4 text-sm font-medium">
+      <a href="#about"      class="text-ink/70 hover:text-rust transition-colors" onclick="closeMobileMenu()">About</a>
+      <a href="#experience" class="text-ink/70 hover:text-rust transition-colors" onclick="closeMobileMenu()">Experience</a>
+      <a href="#skills"     class="text-ink/70 hover:text-rust transition-colors" onclick="closeMobileMenu()">Skills</a>
+      <a href="#contact"    class="text-ink/70 hover:text-rust transition-colors" onclick="closeMobileMenu()">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<header class="min-h-screen flex flex-col justify-center pt-20 pb-16 px-6">
+  <div class="max-w-5xl mx-auto w-full">
+
+    <!-- Status badge -->
+    <div class="flex items-center gap-2 mb-8 reveal">
+      <span class="w-2 h-2 rounded-full bg-sage inline-block" style="animation: pulse 2s infinite;"></span>
+      <span class="font-mono text-xs tracking-widest uppercase text-dusty">Open to Internship · Freelance · 3rd Year IS Student</span>
+    </div>
+
+    <!-- Animated name -->
+    <div class="mb-6 overflow-hidden">
+      <h1 class="font-display text-[clamp(3.2rem,10vw,8rem)] leading-none text-ink tracking-wide">
+        <span id="n1"></span>
+      </h1>
+      <h1 class="font-display text-[clamp(3.2rem,10vw,8rem)] leading-none tracking-wide" style="color:#C4521A;">
+        <span id="n2"></span>
+      </h1>
+      <h1 class="font-display text-[clamp(3.2rem,10vw,8rem)] leading-none text-ink/20 tracking-wide">
+        <span id="n3"></span>
+      </h1>
+    </div>
+
+    <!-- Disciplines -->
+    <div class="flex flex-wrap items-center gap-3 mb-10 reveal">
+      <span class="font-body text-lg text-dusty">Graphic Design</span>
+      <span style="color:#C4521A;">·</span>
+      <span class="font-body text-lg text-dusty">Video Editing</span>
+      <span style="color:#C4521A;">·</span>
+      <span class="font-body text-lg text-dusty">Web Design</span>
+    </div>
+
+    <!-- CTAs -->
+    <div class="flex flex-wrap items-center gap-4 reveal">
+      <a href="#contact" class="inline-flex items-center gap-2 bg-ink text-cream font-medium px-6 py-3 rounded-sm hover:bg-rust transition-colors duration-200">
+        Get in touch
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="https://github.com/wani02002" target="_blank" rel="noopener" class="inline-flex items-center gap-2 border border-ink/30 text-ink font-medium px-6 py-3 rounded-sm hover:border-rust hover:text-rust transition-colors duration-200">
+        GitHub
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+      </a>
+      <a href="#contact" class="inline-flex items-center gap-2 border border-ink/30 text-ink font-medium px-6 py-3 rounded-sm hover:border-rust hover:text-rust transition-colors duration-200">
+        Download CV
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21H19.44a2 2 0 001.94-1.515L22 17"/></svg>
+      </a>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="mt-16 flex items-center gap-2 text-dusty/50">
+      <svg class="bounce" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      <span class="font-mono text-xs tracking-widest uppercase">Scroll</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════ -->
+<section id="about" class="py-24 px-6 bg-ink text-cream">
+  <div class="max-w-5xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-16 items-start">
+
+      <div class="reveal">
+        <p class="section-tag" style="color:rgba(245,240,232,0.4);">01 — About</p>
+        <h2 class="font-display text-5xl md:text-6xl mt-3" style="color:#C4521A;">About Me</h2>
+      </div>
+
+      <div class="reveal">
+        <p class="font-body text-lg leading-relaxed mb-5" style="color:rgba(245,240,232,0.8);">
+          A 23-year-old <strong class="text-cream font-medium">Information Systems</strong> student at
+          <strong class="text-cream font-medium">Caraga State University</strong> with a passion for
+          creativity and technology. I combine design thinking with technical skills — from crafting
+          visual content in Figma and editing videos, to building responsive websites.
+        </p>
+        <p class="font-body text-base leading-relaxed mb-8" style="color:rgba(245,240,232,0.55);">
+          Self-driven learner constantly growing through platforms like YouTube and hands-on project
+          work. Based in Caraga, Philippines.
+        </p>
+
+        <!-- Stat cards -->
+        <div class="grid grid-cols-3 gap-4">
+          <div class="border p-4 rounded-sm" style="border-color:rgba(245,240,232,0.1);">
+            <p class="font-display text-3xl" style="color:#C4521A;">3+</p>
+            <p class="font-mono text-xs tracking-widest uppercase mt-1" style="color:rgba(245,240,232,0.35);">Yrs Editing</p>
+          </div>
+          <div class="border p-4 rounded-sm" style="border-color:rgba(245,240,232,0.1);">
+            <p class="font-display text-3xl" style="color:#C4521A;">1+</p>
+            <p class="font-mono text-xs tracking-widest uppercase mt-1" style="color:rgba(245,240,232,0.35);">Yr Design</p>
+          </div>
+          <div class="border p-4 rounded-sm" style="border-color:rgba(245,240,232,0.1);">
+            <p class="font-display text-3xl" style="color:#C4521A;">3rd</p>
+            <p class="font-mono text-xs tracking-widest uppercase mt-1" style="color:rgba(245,240,232,0.35);">Year IS</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     EXPERIENCE
+═══════════════════════════════════════ -->
+<section id="experience" class="py-24 px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-14 reveal">
+      <p class="section-tag">02 — Experience</p>
+      <h2 class="font-display text-5xl text-ink mt-3">Work &amp; Projects</h2>
+    </div>
+
+    <div class="space-y-10">
+
+      <!-- Video Editor -->
+      <article class="exp-card pl-6 py-1 reveal">
+        <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+          <div>
+            <h3 class="font-body font-medium text-xl text-ink">Video Editor</h3>
+            <p class="font-mono text-sm tracking-wide" style="color:#C4521A;">ELITE CREATIVES</p>
+          </div>
+          <span class="font-mono text-xs bg-ink/5 text-dusty px-3 py-1 rounded-sm">3 Years</span>
+        </div>
+        <ul class="space-y-2 text-dusty text-sm leading-relaxed list-none">
+          <li class="flex items-start gap-2"><span style="color:#C4521A; margin-top:2px;">—</span>Produced and edited videos for school projects and personal creative content</li>
+          <li class="flex items-start gap-2"><span style="color:#C4521A; margin-top:2px;">—</span>Handled full editing workflow: rough cut, transitions, audio, and final export</li>
+          <li class="flex items-start gap-2"><span style="color:#C4521A; margin-top:2px;">—</span>Developed storytelling instincts through consistent self-directed projects</li>
+        </ul>
+      </article>
+
+      <!-- Graphic Designer -->
+      <article class="exp-card pl-6 py-1 reveal">
+        <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+          <div>
+            <h3 class="font-body font-medium text-xl text-ink">Graphic Designer</h3>
+            <p class="font-mono text-sm tracking-wide" style="color:#C4521A;">MASTERPIECE CREATIVES</p>
+          </div>
+          <span class="font-mono text-xs bg-ink/5 text-dusty px-3 py-1 rounded-sm">1 Year</span>
+        </div>
+        <ul class="space-y-2 text-dusty text-sm leading-relaxed list-none">
+          <li class="flex items-start gap-2"><span style="color:#C4521A; margin-top:2px;">—</span>Created visual content using Figma for academic and creative projects</li>
+          <li class="flex items-start gap-2"><span style="color:#C4521A; margin-top:2px;">—</span>Designed layouts, presentations, and digital assets for various purposes</li>
+          <li class="flex items-start gap-2"><span style="color:#C4521A; margin-top:2px;">—</span>Built a consistent personal visual identity and portfolio</li>
+        </ul>
+      </article>
+
+      <!-- Academic -->
+      <article class="exp-card pl-6 py-1 reveal">
+        <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+          <div>
+            <h3 class="font-body font-medium text-xl text-ink">Web Design</h3>
+            <p class="font-mono text-sm tracking-wide" style="color:#C4521A;">CARAGA STATE UNIVERSITY — ACADEMIC</p>
+          </div>
+          <span class="font-mono text-xs px-3 py-1 rounded-sm" style="background:rgba(74,103,65,0.1); color:#4A6741;">Ongoing</span>
+        </div>
+        <ul class="space-y-2 text-dusty text-sm leading-relaxed list-none">
+          <li class="flex items-start gap-2"><span style="color:#C4521A; margin-top:2px;">—</span>Designed and built simple responsive website layouts for academic requirements</li>
+          <li class="flex items-start gap-2"><span style="color:#C4521A; margin-top:2px;">—</span>Applied HTML, CSS, and Tailwind CSS principles learned through coursework</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     SKILLS
+═══════════════════════════════════════ -->
+<section id="skills" class="py-24 px-6 bg-ink text-cream">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="mb-14 reveal">
+      <p class="section-tag" style="color:rgba(245,240,232,0.4);">03 — Skills &amp; Tools</p>
+      <h2 class="font-display text-5xl mt-3" style="color:#C4521A;">Capabilities</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-12">
+
+      <!-- Skills with progress bars -->
+      <div class="md:col-span-2 reveal">
+        <p class="font-mono text-xs tracking-widest uppercase mb-5" style="color:rgba(245,240,232,0.4);">Skills</p>
+        <div class="space-y-5" id="skills-list">
+          <!-- filled by JS -->
+        </div>
+
+        <p class="font-mono text-xs tracking-widest uppercase mb-4 mt-10" style="color:rgba(245,240,232,0.4);">Tools</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="skill-tag font-mono text-xs px-4 py-2 border rounded-sm tracking-wide" style="border-color:rgba(196,82,26,0.4); color:#C4521A;">Figma</span>
+          <span class="skill-tag font-mono text-xs px-4 py-2 border rounded-sm tracking-wide" style="border-color:rgba(196,82,26,0.4); color:#C4521A;">CapCut</span>
+          <span class="skill-tag font-mono text-xs px-4 py-2 border rounded-sm tracking-wide" style="border-color:rgba(196,82,26,0.4); color:#C4521A;">Adobe Premiere Pro</span>
+          <span class="skill-tag font-mono text-xs px-4 py-2 border rounded-sm tracking-wide" style="border-color:rgba(196,82,26,0.4); color:#C4521A;">GitHub</span>
+          <span class="skill-tag font-mono text-xs px-4 py-2 border rounded-sm tracking-wide" style="border-color:rgba(196,82,26,0.4); color:#C4521A;">Canva</span>
+        </div>
+      </div>
+
+      <!-- Interests + Language -->
+      <div class="reveal">
+        <p class="font-mono text-xs tracking-widest uppercase mb-5" style="color:rgba(245,240,232,0.4);">Interests</p>
+        <ul class="space-y-3 text-sm" style="color:rgba(245,240,232,0.7);">
+          <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full inline-block" style="background:#C4521A;"></span>Video Editing</li>
+          <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full inline-block" style="background:#C4521A;"></span>Graphic Design</li>
+          <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full inline-block" style="background:#C4521A;"></span>UI / UX</li>
+          <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full inline-block" style="background:#C4521A;"></span>Web Design</li>
+          <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full inline-block" style="background:#C4521A;"></span>Motion Graphics</li>
+          <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full inline-block" style="background:#C4521A;"></span>Content Creation</li>
+          <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full inline-block" style="background:#C4521A;"></span>Social Media</li>
+          <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full inline-block" style="background:#C4521A;"></span>Self-Learning</li>
+        </ul>
+        <div class="mt-8 border p-4 rounded-sm" style="border-color:rgba(245,240,232,0.1);">
+          <p class="font-mono text-xs tracking-widest uppercase mb-2" style="color:rgba(245,240,232,0.4);">Language</p>
+          <p class="text-sm mb-1" style="color:rgba(245,240,232,0.7);">Filipino · Native</p>
+          <p class="text-sm" style="color:rgba(245,240,232,0.7);">English · Proficient</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     EDUCATION
+═══════════════════════════════════════ -->
+<section id="education" class="py-24 px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-14 reveal">
+      <p class="section-tag">04 — Education</p>
+      <h2 class="font-display text-5xl text-ink mt-3">Background</h2>
+    </div>
+    <div class="reveal border border-ink/10 rounded-sm p-8 md:p-10">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h3 class="font-medium text-xl text-ink mb-1">Bachelor of Information Systems</h3>
+          <p class="font-mono text-sm tracking-wide mb-1" style="color:#C4521A;">Caraga State University</p>
+          <p class="text-sm text-dusty">College of Computing in Information Sciences</p>
+        </div>
+        <span class="font-mono text-xs px-4 py-2 rounded-sm" style="background:rgba(74,103,65,0.1); color:#4A6741;">3rd Year — In Progress</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     CONTACT  (includes form with validation)
+═══════════════════════════════════════ -->
+<section id="contact" class="py-24 px-6 bg-ink text-cream">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="reveal text-center mb-16">
+      <p class="section-tag" style="color:rgba(245,240,232,0.4);">05 — Contact</p>
+      <h2 class="font-display mt-3 leading-none" style="font-size:clamp(3rem,8vw,6rem); color:#C4521A;">Let's Work<br>Together</h2>
+      <p class="mt-4 text-lg max-w-md mx-auto" style="color:rgba(245,240,232,0.55);">Open to internship, freelance projects, and collaborations.</p>
+    </div>
+
+    <!-- Quick links -->
+    <div class="grid md:grid-cols-3 gap-5 mb-12 reveal">
+      <a href="mailto:liwanimespana@gmail.com" class="group border p-5 rounded-sm transition-colors duration-200" style="border-color:rgba(245,240,232,0.1);" onmouseover="this.style.borderColor='#C4521A'" onmouseout="this.style.borderColor='rgba(245,240,232,0.1)'">
+        <p class="font-mono text-xs tracking-widest uppercase mb-2" style="color:rgba(245,240,232,0.4);">Email</p>
+        <p class="text-sm" style="color:rgba(245,240,232,0.8);">liwanimespana@gmail.com</p>
+      </a>
+      <a href="tel:+639183359616" class="group border p-5 rounded-sm transition-colors duration-200" style="border-color:rgba(245,240,232,0.1);" onmouseover="this.style.borderColor='#C4521A'" onmouseout="this.style.borderColor='rgba(245,240,232,0.1)'">
+        <p class="font-mono text-xs tracking-widest uppercase mb-2" style="color:rgba(245,240,232,0.4);">Phone</p>
+        <p class="text-sm" style="color:rgba(245,240,232,0.8);">09183359616</p>
+      </a>
+      <a href="https://github.com/wani02002" target="_blank" rel="noopener" class="group border p-5 rounded-sm transition-colors duration-200" style="border-color:rgba(245,240,232,0.1);" onmouseover="this.style.borderColor='#C4521A'" onmouseout="this.style.borderColor='rgba(245,240,232,0.1)'">
+        <p class="font-mono text-xs tracking-widest uppercase mb-2" style="color:rgba(245,240,232,0.4);">GitHub</p>
+        <p class="text-sm" style="color:rgba(245,240,232,0.8);">github.com/wani02002</p>
+      </a>
+    </div>
+
+    <!-- ── Contact Form ── -->
+    <div class="reveal max-w-2xl mx-auto">
+      <p class="font-mono text-xs tracking-widest uppercase mb-6 text-center" style="color:rgba(245,240,232,0.4);">Or send a message</p>
+
+      <form id="contact-form" novalidate>
+        <!-- Name + Email row -->
+        <div class="grid sm:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label for="f-name" class="font-mono text-xs tracking-widest uppercase block mb-2" style="color:rgba(245,240,232,0.5);">Full Name <span style="color:#C4521A;">*</span></label>
+            <input type="text" id="f-name" name="name" placeholder="Juan dela Cruz" class="form-input" required autocomplete="name" style="background:rgba(255,255,255,0.04); border-color:rgba(245,240,232,0.2); color:#F5F0E8;" />
+            <p class="error-msg" id="err-name">Please enter your name.</p>
+          </div>
+          <div>
+            <label for="f-email" class="font-mono text-xs tracking-widest uppercase block mb-2" style="color:rgba(245,240,232,0.5);">Email Address <span style="color:#C4521A;">*</span></label>
+            <input type="email" id="f-email" name="email" placeholder="you@example.com" class="form-input" required autocomplete="email" style="background:rgba(255,255,255,0.04); border-color:rgba(245,240,232,0.2); color:#F5F0E8;" />
+            <p class="error-msg" id="err-email">Please enter a valid email.</p>
+          </div>
+        </div>
+
+        <!-- Subject -->
+        <div class="mb-5">
+          <label for="f-subject" class="font-mono text-xs tracking-widest uppercase block mb-2" style="color:rgba(245,240,232,0.5);">Subject <span style="color:#C4521A;">*</span></label>
+          <select id="f-subject" name="subject" class="form-input" required style="background:rgba(255,255,255,0.04); border-color:rgba(245,240,232,0.2); color:#F5F0E8;">
+            <option value="" disabled selected>Select a subject…</option>
+            <option value="internship">Internship Opportunity</option>
+            <option value="freelance">Freelance Project</option>
+            <option value="collaboration">Collaboration</option>
+            <option value="other">Other</option>
+          </select>
+          <p class="error-msg" id="err-subject">Please select a subject.</p>
+        </div>
+
+        <!-- Message -->
+        <div class="mb-6">
+          <label for="f-message" class="font-mono text-xs tracking-widest uppercase block mb-2" style="color:rgba(245,240,232,0.5);">Message <span style="color:#C4521A;">*</span></label>
+          <textarea id="f-message" name="message" rows="5" placeholder="Tell me about your project or opportunity…" class="form-input resize-none" required style="background:rgba(255,255,255,0.04); border-color:rgba(245,240,232,0.2); color:#F5F0E8;"></textarea>
+          <div class="flex justify-between items-center mt-1">
+            <p class="error-msg" id="err-message" style="display:none;">Please enter a message (min. 20 characters).</p>
+            <p class="font-mono text-xs ml-auto" style="color:rgba(245,240,232,0.35);"><span id="char-count">0</span> / 500</p>
+          </div>
+        </div>
+
+        <button type="submit" id="submit-btn" class="w-full font-mono text-sm tracking-widest uppercase py-4 rounded-sm transition-colors duration-200 flex items-center justify-center gap-2" style="background:#C4521A; color:#F5F0E8;">
+          <span id="btn-text">Send Message</span>
+          <svg id="btn-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg id="btn-spin" class="hidden animate-spin" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Location -->
+    <p class="font-mono text-xs text-center mt-10" style="color:rgba(245,240,232,0.25);">📍 Caraga, Philippines</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer class="py-8 px-6 border-t border-ink/10">
+  <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4 text-dusty">
+    <span class="font-mono text-xs tracking-widest">© 2026 Liwani Mercy B. España</span>
+    <span class="font-mono text-xs tracking-widest">Built with Tailwind CSS · IT 110</span>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+/* ── 1. Hero animated name ── */
+function animateName(id, text, baseDelay) {
+  const el = document.getElementById(id);
+  text.split('').forEach((ch, i) => {
+    const s = document.createElement('span');
+    s.className = 'hero-char';
+    s.textContent = ch === ' ' ? '\u00A0' : ch;
+    s.style.animationDelay = (baseDelay + i * 0.05) + 's';
+    el.appendChild(s);
+  });
+}
+animateName('n1', 'LIWANI', 0.2);
+animateName('n2', 'MERCY', 0.55);
+animateName('n3', 'ESPAÑA', 0.9);
+
+/* ── 2. Scroll reveal (IntersectionObserver) ── */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ── 3. Skills progress bars (rendered by JS) ── */
+const skills = [
+  { name: 'Figma',            level: 'Advanced',     pct: 90 },
+  { name: 'Video Editing',    level: 'Advanced',     pct: 88 },
+  { name: 'Graphic Design',   level: 'Intermediate', pct: 70 },
+  { name: 'Web Design',       level: 'Basic',        pct: 50 },
+  { name: 'HTML / CSS',       level: 'Basic',        pct: 45 },
+  { name: 'Creativity',       level: 'Strong',       pct: 95 },
+];
+const skillsContainer = document.getElementById('skills-list');
+skills.forEach(sk => {
+  skillsContainer.insertAdjacentHTML('beforeend', `
+    <div class="skill-item">
+      <div class="flex justify-between mb-1">
+        <span class="text-sm font-medium" style="color:rgba(245,240,232,0.85);">${sk.name}</span>
+        <span class="font-mono text-xs" style="color:rgba(245,240,232,0.4);">${sk.level}</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" data-pct="${sk.pct}"></div>
+      </div>
+    </div>
+  `);
+});
+
+/* Animate progress bars when they enter viewport */
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.progress-fill').forEach(bar => {
+        bar.style.width = bar.dataset.pct + '%';
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.skill-item') && document.querySelectorAll('[data-pct]').forEach(bar => {
+  barObserver.observe(bar.closest('.reveal') || bar);
+});
+/* trigger immediately if already in view */
+setTimeout(() => {
+  document.querySelectorAll('.progress-fill').forEach(bar => {
+    const rect = bar.getBoundingClientRect();
+    if (rect.top < window.innerHeight) bar.style.width = bar.dataset.pct + '%';
+  });
+}, 800);
+
+/* ── 4. Mobile menu toggle ── */
+const menuBtn  = document.getElementById('menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+const iconOpen   = document.getElementById('icon-open');
+const iconClose  = document.getElementById('icon-close');
+let menuOpen = false;
+menuBtn.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  mobileMenu.classList.toggle('open', menuOpen);
+  iconOpen.classList.toggle('hidden', menuOpen);
+  iconClose.classList.toggle('hidden', !menuOpen);
+  menuBtn.setAttribute('aria-expanded', menuOpen);
+});
+function closeMobileMenu() {
+  menuOpen = false;
+  mobileMenu.classList.remove('open');
+  iconOpen.classList.remove('hidden');
+  iconClose.classList.add('hidden');
+  menuBtn.setAttribute('aria-expanded', false);
+}
+
+/* ── 5. Back to top button ── */
+const backTop = document.getElementById('back-top');
+window.addEventListener('scroll', () => {
+  backTop.classList.toggle('visible', window.scrollY > 400);
+});
+
+/* ── 6. Character counter for textarea ── */
+const textarea  = document.getElementById('f-message');
+const charCount = document.getElementById('char-count');
+textarea.addEventListener('input', () => {
+  const len = textarea.value.length;
+  charCount.textContent = len;
+  charCount.style.color = len > 450 ? '#C4521A' : 'rgba(245,240,232,0.35)';
+  if (len > 500) textarea.value = textarea.value.slice(0, 500);
+});
+
+/* ── 7. Contact form validation ── */
+function showError(inputId, errId, show) {
+  const input = document.getElementById(inputId);
+  const err   = document.getElementById(errId);
+  if (show) {
+    input.classList.add('error');
+    err.classList.add('show');
+  } else {
+    input.classList.remove('error');
+    err.classList.remove('show');
+  }
+}
+
+function validateForm() {
+  let valid = true;
+  const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const subject = document.getElementById('f-subject').value;
+  const message = document.getElementById('f-message').value.trim();
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  showError('f-name',    'err-name',    !name);
+  if (!name) valid = false;
+
+  showError('f-email',   'err-email',   !emailRe.test(email));
+  if (!emailRe.test(email)) valid = false;
+
+  showError('f-subject', 'err-subject', !subject);
+  if (!subject) valid = false;
+
+  showError('f-message', 'err-message', message.length < 20);
+  if (message.length < 20) { document.getElementById('err-message').style.display = 'block'; valid = false; }
+  else { document.getElementById('err-message').style.display = 'none'; }
+
+  return valid;
+}
+
+/* Clear error on input */
+['f-name','f-email','f-subject','f-message'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    const errId = 'err-' + id.replace('f-','');
+    document.getElementById(id).classList.remove('error');
+    const err = document.getElementById(errId);
+    if (err) { err.classList.remove('show'); err.style.display = ''; }
+  });
+});
+
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (!validateForm()) return;
+
+  /* Show loading state */
+  const btn     = document.getElementById('submit-btn');
+  const btnText = document.getElementById('btn-text');
+  const btnArrow= document.getElementById('btn-arrow');
+  const btnSpin = document.getElementById('btn-spin');
+  btn.disabled = true;
+  btnText.textContent = 'Sending…';
+  btnArrow.classList.add('hidden');
+  btnSpin.classList.remove('hidden');
+
+  /* Simulate send (1.5s) */
+  setTimeout(() => {
+    btn.disabled = false;
+    btnText.textContent = 'Send Message';
+    btnArrow.classList.remove('hidden');
+    btnSpin.classList.add('hidden');
+    this.reset();
+    charCount.textContent = '0';
+
+    /* Show toast */
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }, 1500);
+});
+
+/* ── 8. Smooth-scroll active nav highlight ── */
+const sections = document.querySelectorAll('section[id], header');
+const navLinks  = document.querySelectorAll('a.nav-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 120) current = sec.id || 'hero';
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? '#C4521A' : '';
+  });
+}, { passive: true });
+</script>
+
+</body>
+</html>
